@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 using Require;
 using Shouldly;
 using Listless;
@@ -10,6 +11,7 @@ public class ListlessTest : TestBehaviour
     int chosen;
     List<int> chosens;
     Dictionary<int, int> histogram;
+    Dictionary<int, Dictionary<int, int>> shuffleHistogram;
 
     public override void Spec()
     {
@@ -67,9 +69,9 @@ public class ListlessTest : TestBehaviour
             .Because("RandomWithReplacement(k) should return fairly random results");
 
         Given("it contains numbers 1 through 5")
-            .When("it is shuffled 1000 times")
-            .Then("no item should be in a position more than 250 times")
-            .And("no item should be in a position less than 150 times")
+            .When("it is shuffled 2500 times")
+            .Then("no item should be in a position more than 575 times")
+            .And("no item should be in a position less than 425 times")
             .Because("shuffle should be pretty random");
     }
 
@@ -77,11 +79,18 @@ public class ListlessTest : TestBehaviour
     {
         it = new List<int>();
         histogram = new Dictionary<int, int>();
+        shuffleHistogram = new Dictionary<int, Dictionary<int, int>>();
 
         for (int i = start; i <= finish; i++)
         {
             it.Add(i);
             histogram[i] = 0;
+            shuffleHistogram[i] = new Dictionary<int, int>();
+
+            for (int j = 0; j <= finish - start; j++)
+            {
+                shuffleHistogram[i][j] = 0;
+            }
         }
     }
 
@@ -131,6 +140,19 @@ public class ListlessTest : TestBehaviour
             foreach (int item in it.Random(count))
             {
                 histogram[item]++;
+            }
+        }
+    }
+
+    public void ItIsShuffled__Times(int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            it.Shuffle();
+
+            for (int j = 0; j < it.Count; j++)
+            {
+                shuffleHistogram[it[j]][j]++;
             }
         }
     }
@@ -186,6 +208,28 @@ public class ListlessTest : TestBehaviour
                 }
 
                 i.ShouldNotBe(j);
+            }
+        }
+    }
+
+    public void NoItemShouldBeInAPositionMoreThan__Times(int times)
+    {
+        foreach (Dictionary<int, int> row in shuffleHistogram.Values)
+        {
+            foreach (int count in row.Values)
+            {
+                count.ShouldBeLessThan(times);
+            }
+        }
+    }
+
+    public void NoItemShouldBeInAPositionLessThan__Times(int times)
+    {
+        foreach (Dictionary<int, int> row in shuffleHistogram.Values)
+        {
+            foreach (int count in row.Values)
+            {
+                count.ShouldBeGreaterThan(times);
             }
         }
     }
