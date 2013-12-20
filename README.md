@@ -26,3 +26,8 @@ Throws `IndexOutOfRangeException` if you try to pull more items than exist in th
 Returns `count` non-unique random elements from the list.
 
 Does not throw errors EVER.
+
+In Progress
+-----------
+
+- RemoveRandom() and RemoveRandom(count)
