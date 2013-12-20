@@ -1,3 +1,7 @@
 { 
   "infect": "Listless/Assets",
+  "with": {
+    "invisibledrygoods/GivenWhenUnity": "HEAD",
+    "invisibledrygoods/RequireUnity": "HEAD"
+  }
 }
