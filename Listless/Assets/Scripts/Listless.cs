@@ -52,7 +52,10 @@ namespace Listless
         public static List<T> RandomWithReplacement<T>(this List<T> list, int count)
         {
             List<T> chosenItems = new List<T>();
-            chosenItems.Add(list.Random());
+            for (int i = 0; i < count; i++)
+            {
+                chosenItems.Add(list.Random());
+            }
             return chosenItems;
         }
     }

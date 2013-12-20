@@ -61,7 +61,7 @@ public class ListlessTest : TestBehaviour
             .Because("RandomWithReplacement(k) can return duplicates");
 
         Given("it contains numbers 1 through 5")
-            .When("3 random items are chosen 1000 times with replacement")
+            .When("3 random items are chosen with replacement 1000 times")
             .Then("no item should be chosen more than 750 times")
             .And("no item should be chosen less than 450 times")
             .Because("RandomWithReplacement(k) should return fairly random results");
@@ -100,6 +100,11 @@ public class ListlessTest : TestBehaviour
         chosens = it.Random(count);
     }
 
+    public void __RandomItemsAreChosenWithReplacement(int count)
+    {
+        chosens = it.RandomWithReplacement(count);
+    }
+
     public void ARandomItemIsChosen__Times(int times)
     {
         for (int i = 0; i < times; i++)
@@ -109,6 +114,17 @@ public class ListlessTest : TestBehaviour
     }
 
     public void __RandomItemsAreChosen__Times(int count, int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            foreach (int item in it.Random(count))
+            {
+                histogram[item]++;
+            }
+        }
+    }
+
+    public void __RandomItemsAreChosenWithReplacement__Times(int count, int times)
     {
         for (int i = 0; i < times; i++)
         {
